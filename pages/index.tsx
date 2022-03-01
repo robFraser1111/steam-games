@@ -1,15 +1,27 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 import useSWR from "swr";
 import router from "../lib/router";
+
+const GameCards = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const GameCard = styled.div`
+  width: 184px;
+  height: 200px;
+`;
+
 
 type Games = typeof initGames;
 const initGames = [];
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 
 export default function Index({ user }) {
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, error } = useSWR(`/api/games/${user?.id}`, fetcher);
   const [games, setGames] = useState<Games>(initGames);
 
@@ -25,11 +37,11 @@ export default function Index({ user }) {
   }, [data]);
 
   return (
-    <section>
+    <>
       {user ? (
-        <div>
+        <GameCards>
           {games.map((game, index) => (
-            <div key={index}>
+            <GameCard key={index}>
               <p>{game?.name}</p>
               <Link href={`/game/${game?.appid}`}>
                 <img
@@ -41,9 +53,9 @@ export default function Index({ user }) {
                   alt={game?.name}
                 />
               </Link>
-            </div>
+            </GameCard>
           ))}
-        </div>
+        </GameCards>
       ) : (
         <div>
           Welcome!
@@ -51,7 +63,7 @@ export default function Index({ user }) {
           <Link href="/api/auth/login">Login</Link>
         </div>
       )}
-    </section>
+    </>
   );
 }
 
