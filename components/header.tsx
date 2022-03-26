@@ -68,7 +68,7 @@ export default function Header() {
               alt="Avatar"
               width={32}
               height={32}
-              title={`Steam ID ${value?.user?.id}`}
+              title={`Steam ID: ${value?.user?.id}`}
             />
             <Name>
               Welcome{" "}

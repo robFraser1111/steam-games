@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
+  const { appid, id } = req.query;
 
   const data = await fetch(
-    `https://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=${id}&count=10&maxlength=300`,
+    `http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid=${appid}&key=${process.env.STEAM_API_KEY}&steamid=${id}`,
     {
       method: "GET",
     }
@@ -18,3 +18,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default handler;
+

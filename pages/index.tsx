@@ -1,6 +1,9 @@
+import React, { useState, useEffect, ChangeEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import Search from "../components/search";
+import Sort from "../components/sort";
+import GameCards from "../components/gamesCards";
 import styled from "styled-components";
 import useSWR from "swr";
 import router from "../lib/router";
@@ -10,8 +13,7 @@ import loginButton from "../public/steam-login-narrow-01.png";
 const Main = styled.main`
   background: radial-gradient(
     ${(props) => props.theme.lightBlue},
-    ${(props) => props.theme.blue},
-    ${(props) => props.theme.darkBlue}
+    ${(props) => props.theme.blue}
   );
   color: ${(props) => props.theme.white};
   padding: 32px;
@@ -35,42 +37,10 @@ const Details = styled.section`
 `;
 
 const UserInfo = styled.div`
-  width: 300px;
-`;
+  width: 148px;
 
-const Search = styled.div``;
-
-const Filter = styled.div`
-  width: 300px;
-  text-align: right;
-`;
-
-const GameCards = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px 16px;
-
-  max-width: 1200px;
-  margin: 0 auto;
-  justify-content: center;
-`;
-
-const GameCard = styled.div`
-  width: 184px;
-  height: 190px;
-  background: ${(props) => props.theme.blue};
-  cursor: pointer;
-  overflow: hidden;
-  transition: 0.2s;
-
-  &:hover,
-  &:focus {
-    background: ${(props) => props.theme.lightBlue};
-  }
-
-  h4,
-  h5 {
-    padding: 8px;
+  h3 {
+    padding-top: 8px;
   }
 `;
 
@@ -112,17 +82,24 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 type Games = typeof initGames;
 const initGames = [];
 
+type FilteredGames = typeof initFilteredGames;
+const initFilteredGames = [];
+
 export default function Index({ user }) {
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState(false);
+  // List of games (removed ones with no pics)
+  const [games, setGames] = useState<Games>(initGames);
+  // List of filtered games for search
+  const [filteredGames, setFilteredGames] =
+    useState<FilteredGames>(initFilteredGames);
 
   // Only fetch games if user is logged in
   const { data, error } = useSWR(
     shouldFetch ? `/api/games/${user?.id}` : null,
     fetcher
   );
-
-  // List of filtered games
-  const [games, setGames] = useState<Games>(initGames);
 
   // Check if user is logged in before fetching users games
   useEffect(() => {
@@ -139,6 +116,39 @@ export default function Index({ user }) {
       setGames(filteredGames);
     }
   }, [data]);
+
+  // Handle search input
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearching(true);
+
+    // Check if search term matches a name in the array
+    setTimeout(function () {
+      const newData = games.filter((game: { name: string }) =>
+        game.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+
+      // Set filtered data to new array if search result contains any games
+      if (newData.length > 0) {
+        setFilteredGames(newData);
+      } else {
+        setFilteredGames(initFilteredGames);
+      }
+
+      // Reset filtered data if there's no search term
+      if (e.target.value === "") {
+        setFilteredGames(initFilteredGames);
+      }
+
+      // Error checking
+      if (e.target.value.length > 0 && newData.length === 0) {
+        setSearchError(true);
+      } else {
+        setSearchError(false);
+      }
+
+      setSearching(false);
+    }, 1500);
+  };
 
   if (user && !data)
     return (
@@ -176,42 +186,13 @@ export default function Index({ user }) {
         <Main>
           <Details>
             <UserInfo>
-              <h2>Games owned: {data?.data?.response?.game_count}</h2>
+              <h4>Games owned:</h4>
+              <h3>{data?.data?.response?.game_count}</h3>
             </UserInfo>
-            <Search>Search</Search>
-            <Filter>Filter and Sort</Filter>
+            <Search handleSearch={handleSearch} searching={searching} />
+            <Sort />
           </Details>
-          <GameCards>
-            {games.map((game, index) => (
-              <GameCard key={index}>
-                <Link href={`/game/${game?.appid}`}>
-                  <a>
-                    <img
-                      src={
-                        game?.img_icon_url === ""
-                          ? ""
-                          : `https://media.steampowered.com/steamcommunity/public/images/apps/${game?.appid}/${game?.img_logo_url}.jpg`
-                      }
-                      alt={game?.name}
-                    />
-                    {/* Cut title off if it's too long */}
-                    <h4>
-                      {game?.name.length > 50
-                        ? game?.name.substring(0, 50) + "..."
-                        : game?.name}
-                    </h4>
-                    {/* Convert minutes to hours with 1 decimal point if playtime is more than 10 minutes */}
-                    <h5>
-                      Playtime:{" "}
-                      {game?.playtime_forever > 10
-                        ? (game?.playtime_forever / 60).toFixed(1) + " hours"
-                        : "-"}
-                    </h5>
-                  </a>
-                </Link>
-              </GameCard>
-            ))}
-          </GameCards>
+          <GameCards games={filteredGames.length > 0 ? filteredGames : games} />
         </Main>
       ) : (
         <Main>
