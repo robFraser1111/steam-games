@@ -4,6 +4,10 @@ import useSWR from "swr";
 
 const List = styled.ul`
   list-style: none;
+
+  .achieved {
+    color: green;
+  }
 `;
 
 type Default = typeof initAchievements;
@@ -31,7 +35,7 @@ const Achievements = ({ user, appid }) => {
       <List>
         {gameAchievements != undefined ? (
           gameAchievements.map((item, index) => (
-            <li key={index}>{item?.name.toLowerCase().replaceAll("_", " ")}</li>
+            <li className={item?.achieved === 1 ? 'achieved' : ''} key={index}>{item?.apiname.toLowerCase().replaceAll("_", " ")}</li>
           ))
         ) : (
           <li>-</li>

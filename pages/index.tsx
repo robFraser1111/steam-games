@@ -109,8 +109,8 @@ export default function Index({ user }) {
   useEffect(() => {
     if (data) {
       // Filter out items that don't have an image
-      const filteredGames = data?.data?.response?.games.filter(
-        (item) => item.img_logo_url !== "" && item.img_icon_url !== ""
+      const filteredGames = data?.data?.response?.games?.filter(
+        (item) => item?.img_logo_url !== "" && item?.img_icon_url !== ""
       );
 
       setGames(filteredGames);
@@ -148,6 +148,47 @@ export default function Index({ user }) {
 
       setSearching(false);
     }, 1500);
+  };
+
+  // Sort games array by name
+  const sortGames = (sortBy: ChangeEvent<HTMLInputElement>) => {
+
+    const sortedGames = [...games].sort((a, b) => {
+      const nameA = a?.name.toLowerCase();
+      const nameB = b?.name.toLowerCase();
+
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    });
+
+    if (sortBy.target.value === "name-ascending") {
+      setGames(sortedGames);
+    } else if (sortBy.target.value === "name-descending") {
+      setGames(sortedGames.reverse());
+    } else {
+      setGames(resetSort());
+    }
+
+    console.log("sorted by: ", sortBy.target.value, games);
+  };
+
+  // Reset the games array to default sorting
+  const resetSort = () => {
+    const resetGames = [...games].sort((a, b) => {
+      const appidA = a.appid;
+      const appidB = b.appid;
+
+      return appidA - appidB;
+    });
+
+    return resetGames;
   };
 
   if (user && !data)
@@ -190,9 +231,12 @@ export default function Index({ user }) {
               <h3>{data?.data?.response?.game_count}</h3>
             </UserInfo>
             <Search handleSearch={handleSearch} searching={searching} />
-            <Sort />
+            <Sort sortGames={sortGames} />
           </Details>
-          <GameCards games={filteredGames.length > 0 ? filteredGames : games} />
+          <GameCards
+            games={filteredGames.length > 0 ? filteredGames : games}
+            searchError={searchError}
+          />
         </Main>
       ) : (
         <Main>

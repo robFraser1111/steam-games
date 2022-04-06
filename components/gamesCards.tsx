@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -38,35 +38,43 @@ const GameCard = styled.div`
 const gamesCards = (props) => {
   return (
     <GameCards>
-      {props.games.map((game, index) => (
-        <GameCard key={index}>
-          <Link href={`/game/${game?.appid}`}>
-            <a>
-              <img
-                src={
-                  game?.img_logo_url === undefined
-                    ? gamePlaceholder.src
-                    : `https://media.steampowered.com/steamcommunity/public/images/apps/${game?.appid}/${game?.img_logo_url}.jpg`
-                }
-                alt={game?.name}
-              />
-              {/* Cut title off if it's too long */}
-              <h4>
-                {game?.name.length > 30
-                  ? game?.name.substring(0, 30) + "..."
-                  : game?.name}
-              </h4>
-              {/* Convert minutes to hours with 1 decimal point if playtime is more than 10 minutes */}
-              <h5>
-                Playtime:{" "}
-                {game?.playtime_forever > 10
-                  ? (game?.playtime_forever / 60).toFixed(1) + " hours"
-                  : "-"}
-              </h5>
-            </a>
-          </Link>
-        </GameCard>
-      ))}
+      {/* Display error if search result is null */}
+      {props.searchError ? (
+        <h4>
+          Could not find any games, try searching for another title or clearing
+          the search box.
+        </h4>
+      ) : (
+        props.games.map((game, index) => (
+          <GameCard key={index} title={"App ID: " + game?.appid}>
+            <Link href={`/game/${game?.appid}`}>
+              <a>
+                <img
+                  src={
+                    game?.img_logo_url === undefined
+                      ? gamePlaceholder.src
+                      : `https://media.steampowered.com/steamcommunity/public/images/apps/${game?.appid}/${game?.img_logo_url}.jpg`
+                  }
+                  alt={game?.name}
+                />
+                {/* Cut title off if it's too long */}
+                <h4>
+                  {game?.name.length > 30
+                    ? game?.name.substring(0, 30) + "..."
+                    : game?.name}
+                </h4>
+                {/* Convert minutes to hours with 1 decimal point if playtime is more than 10 minutes */}
+                <h5>
+                  Playtime:{" "}
+                  {game?.playtime_forever > 10
+                    ? (game?.playtime_forever / 60).toFixed(1) + " hours"
+                    : "-"}
+                </h5>
+              </a>
+            </Link>
+          </GameCard>
+        ))
+      )}
     </GameCards>
   );
 };

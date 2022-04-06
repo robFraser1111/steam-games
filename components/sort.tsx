@@ -14,15 +14,21 @@ const Sorting = styled.div`
   }
 `;
 
-const sort = () => {
+const Select = styled.select`
+  background: white;
+  border: none;
+  padding: 5px;
+`;
+
+const sort = (props: { sortGames: (e: any) => void }) => {
   return (
     <Sorting>
-      <label htmlFor="games">Sort:</label>
-      <select name="games">
+      <label htmlFor="games">Sort games:</label>
+      <Select onChange={props.sortGames} name="games">
         <option value="default">Default</option>
         <option value="name-ascending">Name ascending</option>
         <option value="name-descending">Name descending</option>
-      </select>
+      </Select>
     </Sorting>
   );
 };
