@@ -6,6 +6,8 @@ const GlobalStyle = createGlobalStyle`
 
   /* Resets */
   * {
+    /* Removed scrollbar to keep it cleaner */
+    scrollbar-width: none;
     margin: 0;
     padding: 0;
     scrollbar-color: #314985 black;

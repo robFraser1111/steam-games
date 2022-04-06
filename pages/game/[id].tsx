@@ -17,10 +17,15 @@ const Section = styled.section`
   color: ${(props) => props.theme.white};
 
   display: flex;
+  flex-direction: row;
   justify-content: center;
 
   h1 {
     padding: 20px;
+  }
+
+  @media (max-width: 720px) {
+    flex-direction: column;
   }
 `;
 
@@ -44,7 +49,7 @@ const initAppId = 0;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function Game({ user, gameName }) {
+export default function Game({ user }) {
   const router = useRouter();
   const { id } = router.query;
   const { data, error } = useSWR(`/api/game/${id}`, fetcher);
@@ -72,8 +77,8 @@ export default function Game({ user, gameName }) {
           <div>
             {news.map((item, index) => (
               <Article key={index}>
-                <h3>{item.title}</h3>
-                <p>{cleanText(item.contents)}</p>
+                <h3>{item?.title}</h3>
+                <p>{cleanText(item?.contents)}</p>
               </Article>
             ))}
           </div>
@@ -81,7 +86,7 @@ export default function Game({ user, gameName }) {
           <div>Can't load news...</div>
         )}
       </News>
-      <Achievements user={user} appid={appId}/>
+      <Achievements user={user} appid={appId} />
     </Section>
   );
 }
