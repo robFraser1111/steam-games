@@ -15,18 +15,24 @@ const Section = styled.section`
   padding: 32px 0;
 
   color: ${(props) => props.theme.white};
+`;
 
+const Wrapper = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: center;
 
-  h1 {
+  h2 {
     padding: 20px;
   }
 
   @media (max-width: 720px) {
     flex-direction: column;
   }
+`;
+
+const Heading = styled.h1`
+  text-align: center;
 `;
 
 const News = styled.div`
@@ -55,6 +61,7 @@ export default function Game({ user }) {
   const { data, error } = useSWR(`/api/game/${id}`, fetcher);
   const [news, setNews] = useState<News>(initNews);
   const [appId, setAppId] = useState<AppId>(initAppId);
+  const [name, setName] = useState("");
 
   useEffect(() => {
     if (data) {
@@ -63,6 +70,10 @@ export default function Game({ user }) {
     }
   }, [data]);
 
+  const nameHandler = (newName) => {
+    setName(newName);
+  };
+
   // Removes html tags from the description (html entities are still an issue)
   const cleanText = (text: string) => {
     return text.replace(/<\/?[^>]+(>|$)/g, "");
@@ -70,23 +81,26 @@ export default function Game({ user }) {
 
   return (
     <Section>
-      <News>
-        <h1>Latest news</h1>
+      <Heading>{name}</Heading>
+      <Wrapper>
+        <News>
+          <h2>Latest news</h2>
 
-        {user ? (
-          <div>
-            {news.map((item, index) => (
-              <Article key={index}>
-                <h3>{item?.title}</h3>
-                <p>{cleanText(item?.contents)}</p>
-              </Article>
-            ))}
-          </div>
-        ) : (
-          <div>Can't load news...</div>
-        )}
-      </News>
-      <Achievements user={user} appid={appId} />
+          {user ? (
+            <div>
+              {news.map((item, index) => (
+                <Article key={index}>
+                  <h3>{item?.title}</h3>
+                  <p>{cleanText(item?.contents)}</p>
+                </Article>
+              ))}
+            </div>
+          ) : (
+            <div>Can't load news...</div>
+          )}
+        </News>
+        <Achievements user={user} appid={appId} nameHandler={nameHandler} />
+      </Wrapper>
     </Section>
   );
 }

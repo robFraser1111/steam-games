@@ -34,7 +34,7 @@ const initAchievements = [];
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Achievements = ({ user, appid }) => {
+const Achievements = ({ user, appid, nameHandler }) => {
   const { data, error } = useSWR(
     `/api/achievements/${appid}/${user?.id}`,
     fetcher
@@ -45,6 +45,9 @@ const Achievements = ({ user, appid }) => {
   useEffect(() => {
     if (data) {
       setGameAchievements(data?.data?.playerstats?.achievements);
+
+      // Update Game name in parent component from Achievements response
+      nameHandler(data?.data?.playerstats?.gameName);
     }
   }, [data]);
 
