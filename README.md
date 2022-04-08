@@ -12,9 +12,9 @@ Some data might be missing or displayed incorrectly, for example missing images 
 
 <img src="/public/screenshot-02.png?raw=true" alt="Steam Game Page Desktop" />
 
-<img src="/public/screenshot-03.png?raw=true" alt="Steam Home Page Mobile" />
+<img src="/public/screenshot-03.png?raw=true" alt="Steam Home Page Mobile" width="320" />
 
-<img src="/public/screenshot-04.png?raw=true" alt="Steam Game Page Mobile" />
+<img src="/public/screenshot-04.png?raw=true" alt="Steam Game Page Mobile" width="320" />
 
 ## Requirements
 
