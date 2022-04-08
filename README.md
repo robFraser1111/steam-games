@@ -52,10 +52,36 @@ Register for a [Steam API Key](https://steamcommunity.com/dev) and update the .e
 ## Languages & tools
 
 - [Next JS](https://nextjs.org/) React Framework.
+- [TypeScript](https://www.typescriptlang.org/) JavaScript with syntax for types.
 - [Node](https://nodejs.org/en/) Asynchronous event-driven JavaScript runtime.
 - [Styled Components](https://styled-components.com/) CSS is JS.
 - [SWR](https://swr.vercel.app/) React Hooks for Data Fetching.
 - [Passport](http://www.passportjs.org/) Authentication for Node.js.
+
+## Repo structure
+
+Directory structure of full-stack JS app.
+
+```
+/
+├─ .next/                       # Next build folder
+├─ components/                  # React components
+├─ context/                     # React context api for state management
+├─ lib/                         # Next Router config and steam passport strategy
+├─ node_modules/                # Packages for app
+├─ pages/                       # App pages including api and authentication routes
+├─ public/                      # Media
+├─ .babelrc                     # Babel config
+├─ .env                         # Environment variables
+├─ .env.sample                  # Environment variables example
+├─ .gitignore                   # List of files to ignore for repo
+├─ next-env.d.ts                # TypeScript settings for Next
+├─ next.config.js               # Next configuration
+├─ package-lock.json            # Versioned dependencies
+├─ package.json                 # Dependencies and scripts
+├─ README.md                    # This file
+└─ tsconfig.json                # TypeScript configuration
+```
 
 ## License
 
