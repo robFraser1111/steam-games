@@ -1,10 +1,15 @@
 # Steam Games
 
+## To do
+
+Refactor with TS - https://www.typescriptlang.org/
+Add tests with Cypress - https://nextjs.org/docs/testing
+
 ## Description
 
 App for displaying a users collection of Steam games, latest news, and achievements. Utilizing the official [Steam API](https://steamcommunity.com/dev).
 
-Some data might be missing or displayed incorrectly, for example missing images and game decriptions displaying in different languages. This is due the the data we have available to us from the Steam API.
+Some data might be missing or displayed incorrectly, for example missing images and game descriptions displaying in different languages. This is due the the data we have available to us from the Steam API.
 
 ## Screenshots
 
