@@ -115,7 +115,7 @@ const initGames = [];
 type FilteredGames = typeof initFilteredGames;
 const initFilteredGames = [];
 
-export default function Index({ user }) {
+const Index = ({ user }) => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const [searching, setSearching] = useState(false);
   // Back to top button visibility
@@ -323,7 +323,9 @@ export default function Index({ user }) {
       )}
     </>
   );
-}
+};
+
+export default Index;
 
 export async function getServerSideProps({ req, res }) {
   await router.run(req, res);

@@ -55,7 +55,7 @@ const initAppId = 0;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function Game({ user }) {
+const Game = ({ user }) => {
   const router = useRouter();
   const { id } = router.query;
   const { data, error } = useSWR(`/api/game/${id}`, fetcher);
@@ -78,6 +78,15 @@ export default function Game({ user }) {
   const cleanText = (text: string) => {
     return text.replace(/<\/?[^>]+(>|$)/g, "");
   };
+
+  if (user && !data)
+    return (
+      <Section>
+        <Wrapper>
+          <h2>Loading...</h2>
+        </Wrapper>
+      </Section>
+    );
 
   return (
     <Section>
@@ -103,7 +112,9 @@ export default function Game({ user }) {
       </Wrapper>
     </Section>
   );
-}
+};
+
+export default Game;
 
 export async function getServerSideProps({ req, res }) {
   await router.run(req, res);

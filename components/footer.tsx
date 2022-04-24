@@ -19,7 +19,7 @@ const Wrapper = styled.footer`
   }
 `;
 
-export default function Footer() {
+const Footer = () => {
   return (
     <Wrapper>
       <section>
@@ -45,3 +45,5 @@ export default function Footer() {
     </Wrapper>
   );
 }
+
+export default Footer;

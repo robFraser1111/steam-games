@@ -3,7 +3,6 @@ import Image from "next/image";
 import { MyContext } from "../context/state";
 import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-
 import logo from "../public/steam-logo-01.svg";
 import avatarPlaceholder from "../public/avatar-placeholder-01.png";
 
@@ -50,7 +49,7 @@ const Name = styled.h3`
   align-self: center;
 `;
 
-export default function Header() {
+const Header = () => {
   const value = useContext(MyContext);
 
   return (
@@ -75,11 +74,17 @@ export default function Header() {
               {value?.user?.displayName.length > 20
                 ? value?.user?.displayName.substring(0, 10) + "..."
                 : value?.user?.displayName}
-                <Link href="/api/auth/logout"><a><h6>Logout</h6></a></Link>
+              <Link href="/api/auth/logout">
+                <a>
+                  <h6>Logout</h6>
+                </a>
+              </Link>
             </Name>
           </User>
         )}
       </Content>
     </Banner>
   );
-}
+};
+
+export default Header;

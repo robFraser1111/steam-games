@@ -54,7 +54,7 @@ const Wrapper = styled.div`
   min-height: 100vh;
 `;
 
-export default function Layout({ children }) {
+const Layout = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
@@ -66,3 +66,5 @@ export default function Layout({ children }) {
     </ThemeProvider>
   );
 }
+
+export default Layout;
